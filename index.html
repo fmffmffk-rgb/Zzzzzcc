@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <title>تحميل التطبيق</title>
+  <link rel="manifest" href="manifest.json">
+</head>
+<body style="text-align:center;font-family:Arial">
+
+  <h2>📲 إشعار تحميل التطبيق</h2>
+  <button onclick="askPermission()">تفعيل الإشعارات</button>
+  <button onclick="sendNotif()">إرسال إشعار</button>
+
+<script>
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('sw.js');
+}
+
+function askPermission() {
+  Notification.requestPermission().then(result => {
+    alert("حالة الإذن: " + result);
+  });
+}
+
+function sendNotif() {
+  navigator.serviceWorker.ready.then(reg => {
+    reg.showNotification("حمّل التطبيق الآن", {
+      body: "اضغط هنا للتحميل",
+      icon: "icon.png",
+      data: {
+        url: "https://play.google.com/store/apps/details?id=com.example.app"
+      }
+    });
+  });
+}
+</script>
+
+</body>
+</html>
