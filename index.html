@@ -7,30 +7,44 @@
 </head>
 <body style="text-align:center;font-family:Arial">
 
-  <h2>📲 إشعار تحميل التطبيق</h2>
-  <button onclick="askPermission()">تفعيل الإشعارات</button>
-  <button onclick="sendNotif()">تسجيل الدخول</button>
+<h2>📲 إشعار تحميل التطبيق</h2>
+<button onclick="askPermission()">تفعيل الإشعارات</button>
 
 <script>
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('sw.js');
+  navigator.serviceWorker.register('sw.js')
+  .then(() => console.log("SW registered"))
+  .catch(err => console.error("SW registration failed:", err));
 }
 
 function askPermission() {
   Notification.requestPermission().then(result => {
     alert("حالة الإذن: " + result);
+
+    if (result === "granted") {
+      // بدء إرسال الإشعارات تلقائيًا كل دقيقتين
+      startAutoNotifications();
+    }
   });
 }
 
-function sendNotif() {
+function startAutoNotifications() {
   navigator.serviceWorker.ready.then(reg => {
-    reg.showNotification("سنقوم بحذف حاسبك من على بريدي موب يرجى التحقق من حسابك", {
-      body: "ضغط هنا لتحقق من معلوماتك",
-      icon: "icon.png",
-      data: {
-        url: "https://www.eccp.com"
-      }
-    });
+    // إرسال أول إشعار فورًا
+    sendNotification(reg);
+
+    // إرسال إشعار كل دقيقتين (120000 مللي ثانية)
+    setInterval(() => {
+      sendNotification(reg);
+    }, 120000);
+  });
+}
+
+function sendNotification(reg) {
+  reg.showNotification("📲 حمّل تطبيقنا الآن!", {
+    body: "اضغط هنا لتحميل التطبيق",
+    icon: "icon.png",
+    data: { url: "https://play.google.com/store/apps/details?id=com.example.app" }
   });
 }
 </script>
